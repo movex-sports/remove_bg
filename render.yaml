@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: movex-remove-bg
+    runtime: docker
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: REMBG_MODEL
+        value: u2net
+      - key: MAX_UPLOAD_MB
+        value: "10"
+      - key: MAX_CONCURRENT_JOBS
+        value: "1"
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: API_KEY
+        generateValue: true
