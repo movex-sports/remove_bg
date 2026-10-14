@@ -44,24 +44,25 @@ O repositório inclui um `render.yaml`. No Render:
 5. Copie a URL pública e configure o backend principal para chamar `https://SEU-SERVICO/remove-background`.
 6. Copie o valor gerado para `API_KEY` e configure o backend principal para enviá-lo em `X-API-Key`.
 
-O modelo `u2net` é baixado durante a construção da imagem Docker. Isso aumenta o tempo e o tamanho do primeiro build, mas evita o download do modelo toda vez que o serviço reiniciar.
+O modelo leve `u2netp` é baixado durante a construção da imagem Docker. Isso evita o download do modelo toda vez que o serviço reiniciar e reduz o consumo de memória para permitir o teste no plano gratuito.
 
 ## Variáveis de ambiente
 
 | Variável | Padrão | Descrição |
 | --- | --- | --- |
 | `PORT` | `8000` | Porta HTTP. Normalmente definida pelo provedor. |
-| `REMBG_MODEL` | `u2net` | Modelo utilizado pelo `rembg`. |
+| `REMBG_MODEL` | `u2netp` | Modelo utilizado pelo `rembg`. |
 | `MAX_UPLOAD_MB` | `10` | Tamanho máximo da imagem recebida. |
 | `MAX_CONCURRENT_JOBS` | `1` | Quantidade de processamentos simultâneos. |
 | `WEB_CONCURRENCY` | `1` | Quantidade de workers Uvicorn. Mantenha `1` em planos com pouca memória. |
+| `OMP_NUM_THREADS` | `1` | Limita as threads usadas pelo ONNX Runtime. |
 | `API_KEY` | vazio | Se preenchida, protege o endpoint com `X-API-Key`. |
 | `CORS_ORIGINS` | vazio | Origens permitidas, separadas por vírgula, se houver chamada direta de navegador. |
 | `LOG_LEVEL` | `INFO` | Nível dos logs. |
 
 ## Memória
 
-O modelo `u2net` consome uma quantidade relevante de memória. Use uma instância com pelo menos 1 GB de RAM. Se o serviço encerrar por falta de memória, troque `REMBG_MODEL` e o argumento de build para `u2netp`, que é menor, mas pode produzir recortes menos precisos.
+O Blueprint começa com `plan: free` e `u2netp` para testar em 512 MB de RAM. O processamento pode ser lento por causa do limite de CPU. Se a qualidade do recorte não for suficiente, altere o modelo para `u2net`; nesse caso, use preferencialmente uma instância com pelo menos 2 GB de RAM.
 
 ## Integração com o backend
 

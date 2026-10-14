@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("remove_bg")
 
-MODEL_NAME = os.getenv("REMBG_MODEL", "u2net")
+MODEL_NAME = os.getenv("REMBG_MODEL", "u2netp")
 MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))
 MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
 MAX_CONCURRENT_JOBS = max(1, int(os.getenv("MAX_CONCURRENT_JOBS", "1")))
